@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="X-Robots-Tag" content="noindex, nofollow" />
+    <title>Zone Sécurisée</title>
+    <style>
+      body {
+        background: #0a0a0a;
+        color: #0ff;
+        font-family: monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        user-select: none;
+      }
+
+      .container {
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      input[type="password"] {
+        padding: 10px;
+        margin: 10px;
+        font-size: 1rem;
+        width: 200px;
+        border: 2px solid #0ff;
+        border-radius: 4px;
+        background: transparent;
+        color: #0ff;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        color: #0a0a0a;
+        background: #0ff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #00cc99;
+      }
+
+      #content {
+        display: none;
+      }
+
+      #error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔒 Accès sécurisé</h1>
+      <form id="loginForm">
+        <input
+          type="password"
+          id="password"
+          placeholder="Entrez le mot de passe"
+          required
+        />
+        <button type="submit">Se connecter</button>
+      </form>
+      <p id="error" style="display: none">
+        ⛔️ Trop de tentatives ! Veuillez réessayer plus tard.
+      </p>
+    </div>
+
+    <div id="content">
+      <h1 style="color: lime">
+        ✅ Accès accordé : Vous êtes maintenant redirigé vers la zone sécurisée
+      </h1>
+    </div>
+
+    <script>
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.keyCode === 123 || // F12
+          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+          (e.ctrlKey && e.keyCode === 83) || // Ctrl+S
+          (e.ctrlKey && e.keyCode === 70) || // Ctrl+F
+          (e.ctrlKey && e.keyCode === 67) || // Ctrl+C
+          (e.ctrlKey && e.keyCode === 86) || // Ctrl+V
+          (e.ctrlKey && e.keyCode === 65) // Ctrl+A
+        ) {
+          e.preventDefault();
+          return false;
+        }
+      });
+      if (document.referrer === "") {
+        document.getElementById("secureContent").style.display = "block";
+      } else {
+      }
+      const correctPassword = "KLP2109"; // Obfuscation du mot de passe
+      let attemptCount = 0; // Compteur de tentatives
+      const maxAttempts = 1; // Limite de tentatives
+
+      // Fonction de vérification du mot de passe
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Empêche la soumission du formulaire
+
+          const enteredPassword = document.getElementById("password").value;
+
+          if (attemptCount >= maxAttempts) {
+            document.getElementById("error").style.display = "block";
+            return; // Si trop de tentatives, on bloque l'accès
+          }
+
+          if (enteredPassword === correctPassword) {
+            // Si mot de passe correct, rediriger vers 'index.html'
+            window.location.href = "cv.html";
+          } else {
+            attemptCount++; // Compte une tentative
+            alert("⛔️ Mot de passe incorrect !");
+          }
+        });
+
+      // Protection contre l'inspection du code
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.keyCode === 123 || // F12
+          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+          (e.ctrlKey && e.keyCode === 83) || // Ctrl+S
+          (e.ctrlKey && e.keyCode === 70) // Ctrl+F
+        ) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Détection console ouverte
+      setInterval(function () {
+        const before = new Date();
+        debugger;
+        const after = new Date();
+        if (after - before > 100) {
+          document.body.innerHTML =
+            "<h1 style='color: red; text-align: center;'>🚫 Console détectée : accès bloqué</h1>";
+        }
+      }, 1000);
+      // 🔐 Bloque le retour arrière avec redirection
+      history.pushState(null, null, location.href);
+      window.onpopstate = function () {
+        window.location.href = "accès-refusé.html";
+      };
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.key === "F5" ||
+          (e.ctrlKey && e.key === "r") ||
+          (e.metaKey && e.key === "r")
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      // Bloque retour arrière
+      history.pushState(null, "", location.href);
+      window.onpopstate = function () {
+        history.pushState(null, "", location.href);
+      };
+
+      // Bloque retour avant avec redirection auto
+      window.onforward = function () {};
+
+      // Bloque rafraîchissement F5 et Ctrl+R
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.key === "F5" ||
+          (e.ctrlKey && e.key === "r") ||
+          (e.metaKey && e.key === "r")
+        ) {
+          e.preventDefault();
+        }
+      });
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.key === "F5" ||
+          (e.ctrlKey && e.key === "r") ||
+          (e.metaKey && e.key === "r")
+        ) {
+          e.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>

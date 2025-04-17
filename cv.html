@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="X-Robots-Tag" content="noindex, nofollow" />
+    <title>CheatForge</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #222;
+        color: white;
+      }
+
+      header {
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      #searchInput {
+        padding: 10px;
+        width: 80%;
+        margin-top: 20px;
+        font-size: 1.2em;
+        border-radius: 5px;
+        border: 2px solid #444;
+      }
+
+      #downloadButton {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 15px 30px;
+        background-color: #444;
+        color: rgb(255, 255, 255);
+        font-size: 1.2em;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      #downloadButton:hover {
+        background-position: center;
+        background-color: #445;
+        border-image: none;
+      }
+
+      main {
+        padding: 20px;
+        text-align: center;
+      }
+
+      section {
+        margin-top: 30px;
+      }
+
+      /* Ajout d'un style pour le bouton de téléchargement */
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>CheatForge</h1>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Rechercher des cheats..."
+        onkeyup="searchCheats()"
+      />
+      <a id="downloadButton" href="tele.html">Télécharger l'Appli</a>
+    </header>
+
+    <main>
+      <section id="cheatList"></section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+      // Désactive clic droit
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+      // Désactive glisser-déposer
+      document.addEventListener("dragstart", (e) => e.preventDefault());
+
+      // Désactive la sélection de texte
+      document.addEventListener("selectstart", (e) => e.preventDefault());
+
+      // Désactive toutes les touches d'inspection connues
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.keyCode === 123 || // F12
+          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+          (e.ctrlKey && e.keyCode === 83) || // Ctrl+S
+          (e.ctrlKey && e.keyCode === 70) || // Ctrl+F
+          (e.ctrlKey && e.keyCode === 67) || // Ctrl+C
+          (e.ctrlKey && e.keyCode === 86) || // Ctrl+V
+          (e.ctrlKey && e.keyCode === 65) // Ctrl+A
+        ) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Détection anti-debug/console ouverte
+      setInterval(function () {
+        const before = new Date();
+        debugger;
+        const after = new Date();
+        if (after - before > 100) {
+          document.body.innerHTML =
+            '<h1 style="color: red; text-align: center; margin-top: 20%;">🚫 Debug interdit</h1>';
+        }
+      }, 1000);
+
+      // Protection anti-inspection
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      document.addEventListener("dragstart", (e) => e.preventDefault());
+      document.addEventListener("selectstart", (e) => e.preventDefault());
+
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.keyCode === 123 || // F12
+          (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+          (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+          (e.ctrlKey && e.keyCode === 83) || // Ctrl+S
+          (e.ctrlKey && e.keyCode === 70) // Ctrl+F
+        ) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      const osBlacklist = [
+        "Linux",
+        "Kali-linux",
+        "Ubuntu",
+        "Parrot os",
+        "Exegol",
+        "NMAP",
+        "Metasploi",
+        "John the Ripper",
+        "Wireshark",
+        "Acunetix",
+        "Peach fuzzer",
+        "Invicti",
+        "Aircrack-ng",
+        "Maltego",
+        "Hacker One",
+      ]; // Ajoute ce que tu veux bloquer ici
+      const userOS = navigator.userAgent;
+      for (let os of osBlacklist) {
+        if (userOS.includes(os)) {
+          document.body.innerHTML =
+            "<h1 style='color: red; text-align: center;'>⛔️ Accès refusé : système non autorisé</h1>";
+          throw new Error("Système bloqué : " + os);
+        }
+      }
+
+      // Protection contre le retour arrière
+      history.pushState(null, "", location.href);
+      window.onpopstate = function () {
+        history.pushState(null, "", location.href);
+      };
+    </script>
+  </body>
+</html>
